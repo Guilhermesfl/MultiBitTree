@@ -3,39 +3,60 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-node* NewNode(uint8_t key) { 
-  node* x = (node*)malloc(sizeof(node));    // "new" is like "malloc" 
-  x->key = key; 
+node* NewNode(void) {
+ 
+  node* x = (node*)malloc(sizeof(node));
   x->left = NULL; 
   x->right = NULL;
 
   return x; 
 } 
 
-node* insert(node* node, uint8_t key) { 
+node* insert(node* node,int pfx[],int size, int *pos) {
 
-	if (node == NULL) return NewNode(key); 
-	else {
-    if (key <= node->key) node->left = insert(node->left, key); 
-		else node->right = insert(node->right, key);
-    return node;
-  } 
+	if(*pos == size) return node;
+	else{
+		if (node == NULL){
+			node = NewNode(); 
+			node->key = pfx[*pos];
+			*pos = *pos + 1; 
+			if(pfx[*pos] <= 0) node->left = insert(node->left,pfx,size,pos);
+			else node->right = insert(node->right,pfx,size,pos);
+		} else {
+			*pos = *pos + 1;
+    		if (pfx[*pos] <= 0) node->left = insert(node->left,pfx,size,pos); 
+    		else node->right = insert(node->right,pfx,size,pos);	
+  		}
+  	}
 }
 
 node* prefix_btree(void)
 {
-	//FILE *prefixes = fopen("prefixes.txt", "r");
-	int a = 101;
-	node *root = NewNode(0);
-	insert(root,a);
-  printTree(root);
+	char c;
+	int pos = -1;
+	int a1[] = {0,0,0,0,1,1};
+	int a2[] = {0,0,0,0,1,0};
 
-  return root;
+	node *root = NewNode();
+	root->key = 0.5;
+	//FILE *pfxs = fopen("teste.txt", "rb");
+	insert(root,a1,6,&pos);
+	pos = -1;
+	insert(root,a2,6,&pos);
+	printf("\n");
+  	printTree(root);
+
+  	//fclose(pfxs);
+
+ 	return root;
 } 
 
 void printTree(node* node) { 
   if (node == NULL) return;
-  printTree(node->left); 
-  printf("%d ", node->key); 
+  printf("%d ", node->key);
+  printTree(node->left);  
   printTree(node->right); 
-} 
+}
+int ctoi(char c) {
+    return c-'0';
+}

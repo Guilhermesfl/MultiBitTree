@@ -14,8 +14,8 @@ struct Node{
 struct B_tree{
 	node *root;
 };
-
+int ctoi(char c);
 void printTree(node* node);
 node* prefix_btree(void);
-node* insert(node* node, uint8_t key);
-node* NewNode(uint8_t key);
+node* insert(node* node,int pfx[],int size, int *pos);
+node* NewNode(void);
