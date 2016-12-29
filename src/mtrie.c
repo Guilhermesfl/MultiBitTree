@@ -3,16 +3,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-node* NewNode(void) {
+int ctoi(char c) {
+    return c-'0';
+}
+
+bnode* NewNode(void) {
  
-  node* x = (node*)malloc(sizeof(node));
+  bnode* x = (bnode*)malloc(sizeof(bnode));
   x->left = NULL; 
   x->right = NULL;
+  x->color = 0;
 
   return x; 
 } 
 
-node* insert(node* node,int pfx[],int size, int *pos) {
+bnode* insert(bnode* node,int pfx[],int size, int *pos) {
 
 	if(*pos == size) return node;
 	else{
@@ -30,14 +35,14 @@ node* insert(node* node,int pfx[],int size, int *pos) {
   	}
 }
 
-node* prefix_btree(void)
+bnode* prefix_btree(void)
 {
 	char c;
 	int pos = -1;
 	int a1[] = {0,0,0,0,1,1};
 	int a2[] = {0,0,0,0,1,0};
 
-	node *root = NewNode();
+	bnode *root = NewNode();
 	root->key = 0.5;
 	//FILE *pfxs = fopen("teste.txt", "rb");
 	insert(root,a1,6,&pos);
@@ -51,12 +56,44 @@ node* prefix_btree(void)
  	return root;
 } 
 
-void printTree(node* node) { 
+void printTree(bnode* node) { 
   if (node == NULL) return;
   printf("%d ", node->key);
   printTree(node->left);  
   printTree(node->right); 
 }
-int ctoi(char c) {
-    return c-'0';
+/*********************************************
+* DFS gives us the depth of the current node
+**********************************************/
+int DFS(bnode* node)
+{
+	int depth = 0;
+
+	if(node->left->color == 0 && node->left != NULL) node->left = DFS_visit(node->left,&depth);
+	if(node->right->color == 0 && node->left != NULL)node->right = DFS_visit(node->right,&depth);
+
+	return depth;
+}
+bnode* DFS_visit(bnode* node, int* depth)
+{
+	*depth = *depth + 1;
+	node->color = 1;
+
+	if(node->left->color == 0 && node->left != NULL) node->left = DFS_visit(node->left,depth);
+	if(node->right->color == 0 && node->left != NULL) node->right = DFS_visit(node->right,depth);
+
+	node->color = 0;
+
+	return node;
+}
+bnode* constructor(bnode* node, int a, int b)
+{
+	if((DFS(node->left)== b) || (DFS(node->right)== b)) node->type = 0;
+ 	else{
+		if((DFS(node)%a) == 0) node->type = 1;
+		constructor(node->left,a,b);
+		constructor(node->right,a,b);
+		if((DFS(node->left)== b) || (DFS(node->right)== b)) node->type = 0;
+	}
+	return node;
 }
