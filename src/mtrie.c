@@ -13,6 +13,7 @@ bnode* NewNode(void) {
   x->left = NULL; 
   x->right = NULL;
   x->color = 0;
+  x->type = -1;
 
   return x; 
 } 
@@ -71,7 +72,7 @@ bnode* prefix_btree(void)
 	insert(root,a9,2,&pos);
 	printf("\n");
   	printTree(root);
-
+  	printf("\n");
 
  	return root;
 } 
@@ -83,35 +84,50 @@ void printTree(bnode* node) {
   printTree(node->right); 
 }
 /*********************************************
-* DFS gives us the depth of the current node
+*Traverse the tree to construct the multibit
+*nodes and leaves 
 **********************************************/
-bnode* DFS(bnode* node,int a,int b)
+bnode* DFS(bnode* node,int a,int b, int *node_depth, int *subtrie_depth)
 {
-	if(node->left->color == 0 && node->left != NULL) node->left = DFS_visit(node->left,a,b);
-	if(node->right->color == 0 && node->right != NULL)node->right = DFS_visit(node->right,a,b);
+	if(node->left->color == 0 && node->left != NULL){
+		node->left = DFS_visit(node->left,a,b,node_depth,subtrie_depth);
+		*node_depth = *node_depth - 1; 
+	}
+	if(node->right->color == 0 && node->right != NULL)node->right = DFS_visit(node->right,a,b,node_depth,subtrie_depth);
 
 	return node;
 }
-bnode* DFS_visit(bnode* node,int a, int b)
+
+bnode* DFS_visit(bnode* node,int a, int b, int *node_depth, int *subtrie_depth)
 {
+	*node_depth = *node_depth + 1;
+	if(*node_depth > *subtrie_depth) *subtrie_depth = *subtrie_depth + 1;
 	node->color = 1;
 	node = constructor(node,a,b);
 
-	if(node->left->color == 0 && node->left != NULL) node->left = DFS_visit(node->left,a,b);
-	if(node->right->color == 0 && node->right != NULL) node->right = DFS_visit(node->right,a,b);
-
+	if(node->left->color == 0 && node->left != NULL){
+		node->left = DFS_visit(node->left,a,b,node_depth,subtrie_depth);
+		*node_depth = *node_depth - 1; 
+	}
+	if(node->right->color == 0 && node->right != NULL){
+		node->right = DFS_visit(node->right,a,b,node_depth,subtrie_depth);
+		*node_depth = *node_depth - 1; 
+	}
 	node->color = 2;
 
 	return node;
 }
+
 bnode* constructor(bnode* node, int a, int b)
 {
-	if((node->left->depth==b && node->left != NULL) || (node->right->depth==b && node->right != NULL)) node->type = 0;
+	int node_depth = 0, subtrie_depth = 0;
+	node = DFS(node,a,b,&node_depth,&subtrie_depth);
+	if(subtrie_depth==b) node->type = 0;
  	else{
 		if((node->depth%a) == 0) node->type = 1;
-		constructor(node->left,a,b);
-		constructor(node->right,a,b);
-		if((node->left->depth==b && node->left != NULL) || (node->right->depth==b && node->right != NULL)) node->type = 0;
+		if(node->left != NULL) constructor(node->left,a,b);
+		if(node->right != NULL) constructor(node->right,a,b);
+		if(subtrie_depth==b) node->type = 0;
 	}
 	return node;
 }

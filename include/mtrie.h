@@ -42,6 +42,6 @@ void printTree(bnode* node);
 bnode* prefix_btree(void);
 bnode* insert(bnode* node,int pfx[],int size, int *pos);
 bnode* NewNode(void);
-bnode* DFS(bnode* node,int a,int b);
-bnode* DFS_visit(bnode* node,int a, int b);
+bnode* DFS(bnode* node,int a,int b, int *node_depth, int *subtrie_depth);
+bnode* DFS_visit(bnode* node,int a, int b, int *node_depth, int *subtrie_depth);
 bnode* constructor(bnode* node, int a, int b);
