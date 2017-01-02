@@ -6,6 +6,7 @@
 int main(int argc, char const *argv[])
 {
 	bnode *x = prefix_btree();
+	//x = DFS(x,2,3);
 
 	return 0;
 }

@@ -13,6 +13,7 @@ struct Node{
 	uint8_t key;
 	int color;
 	int type; //0 -> MULTIBITLEAF, 1 -> MULTIBITNODE
+	int depth;
 	bnode *left;
 	bnode *right;
 };
@@ -41,6 +42,6 @@ void printTree(bnode* node);
 bnode* prefix_btree(void);
 bnode* insert(bnode* node,int pfx[],int size, int *pos);
 bnode* NewNode(void);
-int DFS(bnode* node);
-bnode* DFS_visit(bnode* node, int* depth);
+bnode* DFS(bnode* node,int a,int b);
+bnode* DFS_visit(bnode* node,int a, int b);
 bnode* constructor(bnode* node, int a, int b);
