@@ -120,7 +120,7 @@ bnode* DFS_visit(bnode* node,int a, int b, int *node_depth, int *subtrie_depth)
 
 bnode* constructor(bnode* node, int a, int b)
 {
-	int node_depth = 0, subtrie_depth = 0;
+	int node_depth = 1,subtrie_depth = 1;
 	node = DFS(node,a,b,&node_depth,&subtrie_depth);
 	if(subtrie_depth==b) node->type = 0;
  	else{
