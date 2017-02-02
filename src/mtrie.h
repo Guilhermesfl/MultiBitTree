@@ -11,7 +11,6 @@ typedef struct Leaf_entry l_entry;
 
 struct Node{
 	uint8_t key;
-	int color;
 	int type; //0 -> MULTIBITLEAF, 1 -> MULTIBITNODE
 	int depth;
 	bnode *left;

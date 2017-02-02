@@ -8,7 +8,6 @@ bnode* NewNode(void) {
   bnode* x = (bnode*)malloc(sizeof(bnode));
   x->left = NULL; 
   x->right = NULL;
-  x->color = 0;
   x->type = -1;
 
   return x; 
@@ -72,8 +71,8 @@ bnode* prefix_btree(void)
 
 void printTree(bnode* node) { 
   if (node == NULL) return;
-  printf("%d ", node->key);
-  //printf("%d ", node->type);
+  //printf("%d ", node->key);
+  printf("%d ", node->type);
   printTree(node->left);  
   printTree(node->right); 
 }
@@ -116,13 +115,15 @@ bnode* constructor(bnode* node, int a, int b)
 {
 	int node_depth = 0,subtrie_depth = -1;
 	node = DEPTH(node,a,b,&node_depth,&subtrie_depth);
+	if(subtrie_depth != -1) node_depth = subtrie_depth + 1;
+	else node_depth = -1;
 	printf("subtrie_depth = %d, node_depth =  %d\n", subtrie_depth, node_depth);
-	if(subtrie_depth==b) node->type = 0;
+	if(subtrie_depth <= b) node->type = 0;
  	else{
-		if((node->depth%a) == 0) node->type = 1;
+		if((node_depth%a) == 0) node->type = 1;
 		if(node->left != NULL) constructor(node->left,a,b);
 		if(node->right != NULL) constructor(node->right,a,b);
-		if(subtrie_depth==b) node->type = 0;
+		if(subtrie_depth <=b) node->type = 0;
 	}
 	return node;
 }
