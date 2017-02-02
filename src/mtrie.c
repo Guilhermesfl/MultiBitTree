@@ -118,12 +118,12 @@ bnode* constructor(bnode* node, int a, int b)
 	if(subtrie_depth != -1) node_depth = subtrie_depth + 1;
 	else node_depth = -1;
 	printf("subtrie_depth = %d, node_depth =  %d\n", subtrie_depth, node_depth);
-	if(subtrie_depth <= b) node->type = 0;
+	if(subtrie_depth == b) node->type = 0;
  	else{
 		if((node_depth%a) == 0) node->type = 1;
 		if(node->left != NULL) constructor(node->left,a,b);
 		if(node->right != NULL) constructor(node->right,a,b);
-		if(subtrie_depth <=b) node->type = 0;
+		if(subtrie_depth ==b) node->type = 0;
 	}
 	return node;
 }
