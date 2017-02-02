@@ -37,11 +37,10 @@ struct Node_entry{
 	mnode *n_brach;
 };
 
-int ctoi(char c);
 void printTree(bnode* node);
 bnode* prefix_btree(void);
 bnode* insert(bnode* node,int pfx[],int size, int *pos);
 bnode* NewNode(void);
-bnode* DFS(bnode* node,int a,int b, int *node_depth, int *subtrie_depth);
-bnode* DFS_visit(bnode* node,int a, int b, int *node_depth, int *subtrie_depth);
 bnode* constructor(bnode* node, int a, int b);
+bnode* DEPTH(bnode* node,int a,int b, int *node_depth, int *subtrie_depth);
+bnode* DEPTH_visit(bnode* node,int a, int b, int *node_depth, int *subtrie_depth);

@@ -3,10 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int ctoi(char c) {
-    return c-'0';
-}
-
 bnode* NewNode(void) {
  
   bnode* x = (bnode*)malloc(sizeof(bnode));
@@ -87,33 +83,33 @@ void printTree(bnode* node) {
 *Traverse the tree to construct the multibit
 *nodes and leaves 
 **********************************************/
-bnode* DFS(bnode* node,int a,int b, int *node_depth, int *subtrie_depth)
+
+bnode* DEPTH(bnode* node,int a,int b, int *node_depth, int *subtrie_depth)
 {
-	if(node->left->color == 0 && node->left != NULL){
-		node->left = DFS_visit(node->left,a,b,node_depth,subtrie_depth);
+	if(node->left != NULL){
+		node->left = DEPTH_visit(node->left,a,b,node_depth,subtrie_depth);
 		*node_depth = *node_depth - 1; 
 	}
-	if(node->right->color == 0 && node->right != NULL)node->right = DFS_visit(node->right,a,b,node_depth,subtrie_depth);
-
+	if(node->right != NULL){
+		node->right = DEPTH_visit(node->right,a,b,node_depth,subtrie_depth);
+		*node_depth = *node_depth - 1;
+	}
 	return node;
 }
 
-bnode* DFS_visit(bnode* node,int a, int b, int *node_depth, int *subtrie_depth)
+bnode* DEPTH_visit(bnode* node,int a, int b, int *node_depth, int *subtrie_depth)
 {
 	*node_depth = *node_depth + 1;
 	if(*node_depth > *subtrie_depth) *subtrie_depth = *subtrie_depth + 1;
-	node->color = 1;
-	node = constructor(node,a,b);
 
-	if(node->left->color == 0 && node->left != NULL){
-		node->left = DFS_visit(node->left,a,b,node_depth,subtrie_depth);
+	if(node->left != NULL){
+		node->left = DEPTH_visit(node->left,a,b,node_depth,subtrie_depth);
 		*node_depth = *node_depth - 1; 
 	}
-	if(node->right->color == 0 && node->right != NULL){
-		node->right = DFS_visit(node->right,a,b,node_depth,subtrie_depth);
+	if(node->right != NULL){
+		node->right = DEPTH_visit(node->right,a,b,node_depth,subtrie_depth);
 		*node_depth = *node_depth - 1; 
 	}
-	node->color = 2;
 
 	return node;
 }
@@ -121,7 +117,7 @@ bnode* DFS_visit(bnode* node,int a, int b, int *node_depth, int *subtrie_depth)
 bnode* constructor(bnode* node, int a, int b)
 {
 	int node_depth = 1,subtrie_depth = 1;
-	node = DFS(node,a,b,&node_depth,&subtrie_depth);
+	node = DEPTH(node,a,b,&node_depth,&subtrie_depth);
 	if(subtrie_depth==b) node->type = 0;
  	else{
 		if((node->depth%a) == 0) node->type = 1;

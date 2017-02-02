@@ -9,8 +9,7 @@ int main(int argc, char const *argv[])
 	a = 2;
 	b = 3;
 	bnode *x = prefix_btree();
-	//x = constructor(x,a,b);	
-	//x = DFS(x,a,b,&node_depth,&subtrie_depth);
+	x =  constructor(x,a,b);
 
 	return 0;
 }
