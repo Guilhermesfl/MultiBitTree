@@ -11,5 +11,8 @@ int main(int argc, char const *argv[])
 	bnode *x = prefix_btree();
 	x =  constructor(x,a,b);
 
+  	printTree(x);
+  	printf("\n");
+
 	return 0;
 }

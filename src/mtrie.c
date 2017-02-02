@@ -66,9 +66,6 @@ bnode* prefix_btree(void)
 	insert(root,a8,5,&pos);
 	pos = -1;
 	insert(root,a9,2,&pos);
-	printf("\n");
-  	printTree(root);
-  	printf("\n");
 
  	return root;
 } 
@@ -76,6 +73,7 @@ bnode* prefix_btree(void)
 void printTree(bnode* node) { 
   if (node == NULL) return;
   printf("%d ", node->key);
+  //printf("%d ", node->type);
   printTree(node->left);  
   printTree(node->right); 
 }
@@ -116,8 +114,9 @@ bnode* DEPTH_visit(bnode* node,int a, int b, int *node_depth, int *subtrie_depth
 
 bnode* constructor(bnode* node, int a, int b)
 {
-	int node_depth = 1,subtrie_depth = 1;
+	int node_depth = 0,subtrie_depth = -1;
 	node = DEPTH(node,a,b,&node_depth,&subtrie_depth);
+	printf("subtrie_depth = %d, node_depth =  %d\n", subtrie_depth, node_depth);
 	if(subtrie_depth==b) node->type = 0;
  	else{
 		if((node->depth%a) == 0) node->type = 1;
